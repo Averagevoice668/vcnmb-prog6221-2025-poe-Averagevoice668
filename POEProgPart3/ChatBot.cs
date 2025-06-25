@@ -63,42 +63,6 @@ namespace POEProgPart3
             synth.Volume = 100; // Max volume
         }
 
-        /*public static string AskName(RichTextBox conversationBox, string userName)
-        {
-            AppendMessage(conversationBox, "Chatbot", "Please enter your name:");
-
-            if (!string.IsNullOrEmpty(userName))
-            {
-                userData.UserName = userName.Trim();
-                string greeting = $"Hello {userData.UserName}! I'm here to help you stay safe online.";
-                AppendMessage(conversationBox, "Chatbot", greeting);
-
-                // Immediately ask for the favorite topic
-                AskFavouriteTopic(conversationBox, "");
-            }
-            return userName;
-        }
-
-        public static string AskFavouriteTopic(RichTextBox conversationBox, string favouriteTopic)
-        {
-            AppendMessage(conversationBox, "Chatbot", "What is your favourite cybersecurity topic? (Password Safety, Phishing, Safe Browsing)");
-
-            if (!string.IsNullOrEmpty(favouriteTopic))
-            {
-                userData.FavouriteTopic = favouriteTopic.Trim().ToLower();
-
-                if (responses.ContainsKey(userData.FavouriteTopic))
-                {
-                    AppendMessage(conversationBox, "Chatbot", $"Great choice, {userData.UserName}! I’ll remember that you’re interested in {userData.FavouriteTopic}.");
-                }
-                else
-                {
-                    AppendMessage(conversationBox, "Chatbot", "Hmm, I didn't recognize that topic. Please choose from Password Safety, Phishing, or Safe Browsing.");
-                }
-            }
-            return favouriteTopic;
-        }*/
-
         public static void SetUserName(string name)
         {
             userData.UserName = name.Trim();
@@ -238,8 +202,25 @@ namespace POEProgPart3
             {
                 AppendMessage(conversationBox, "Chatbot", "I'm not sure how to answer that. Try asking about cybersecurity topics.");
             }
-
             return userInput;
+        }
+
+        public static void ShowLog(RichTextBox box)
+        {
+            var logs = ActivityLog.ShowLog(10); // Shows last 10 logs
+
+            if (logs.Count == 0)
+            {
+                AppendMessage(box, "Chatbot", "The activity log is empty.");
+            }
+            else
+            {
+                AppendMessage(box, "Chatbot", "Recent activity log:");
+                foreach (var entry in logs)
+                {
+                    AppendMessage(box, "Chatbot", entry);
+                }
+            }
         }
 
         public static void StartAddTask(RichTextBox conversationBox)
@@ -283,20 +264,28 @@ namespace POEProgPart3
                     break;
 
                 case 3:
-                    if (userInput.Trim().ToLower() == "no")
-                    {
+                    if(userInput.Trim().ToLower() == "no")
+            {
                         newTask.Reminder = null;
                         tasks.Add(newTask);
                         AppendMessage(conversationBox, "Chatbot", $"Task '{newTask.Title}' added without a reminder.");
+
+                        // ✅ Add to activity log
+                        ActivityLog.AddLog($"Added task '{newTask.Title}' without a reminder.");
+
                         ResetAddTask();
                     }
-                    else
+            else
                     {
                         if (DateTime.TryParse(userInput.Trim(), out DateTime reminderDate))
                         {
                             newTask.Reminder = reminderDate;
                             tasks.Add(newTask);
                             AppendMessage(conversationBox, "Chatbot", $"Task '{newTask.Title}' added with reminder set for {reminderDate:g}.");
+
+                            // ✅ Add to activity log
+                            ActivityLog.AddLog($"Added task '{newTask.Title}' with reminder for {reminderDate:g}.");
+
                             ResetAddTask();
                         }
                         else
@@ -403,7 +392,7 @@ namespace POEProgPart3
             currentQuestionIndex = 0;
             correctAnswers = 0;
             incorrectQuestions.Clear();
-
+            ActivityLog.AddLog("Started a cybersecurity quiz.");
             AppendMessage(box, "Chatbot", "Starting Cybersecurity Quiz! Answer the questions by typing the correct option.");
             AskNextQuestion(box);
         }
@@ -477,6 +466,7 @@ namespace POEProgPart3
             {
                 AppendMessage(box, "Chatbot", "Perfect Score! Well done! XD");
             }
+            ActivityLog.AddLog($"Completed a quiz: {correctAnswers}/{quizQuestions.Count} correct.");
         }
 
         public static bool IsQuizInProgress()
@@ -487,14 +477,31 @@ namespace POEProgPart3
         public static void HandleDeleteTask(string input, RichTextBox box, List<AddTask> tasks)
         {
             var parts = input.Split(' ');
-            if (parts.Length == 3 && int.TryParse(parts[2], out int index) && index >= 1 && index <= tasks.Count)
+
+            if (tasks.Count == 0)
             {
-                tasks.RemoveAt(index - 1);
-                AppendMessage(box, "Chatbot", $"Deleted task #{index}.");
+                AppendMessage(box, "Chatbot", "You have no tasks to delete.");
+                return;
+            }
+
+            if (parts.Length == 3 && int.TryParse(parts[2], out int index))
+            {
+                if (index >= 1 && index <= tasks.Count)
+                {
+                    var removedTask = tasks[index - 1];
+                    var taskTitle = tasks[index - 1].Title;
+                    tasks.RemoveAt(index - 1);
+                    AppendMessage(box, "Chatbot", $"Deleted task #{index}: {removedTask.Title}");
+                    ActivityLog.AddLog($"Deleted task '{taskTitle}'.");
+                }
+                else
+                {
+                    AppendMessage(box, "Chatbot", "That task number doesn't exist.");
+                }
             }
             else
             {
-                AppendMessage(box, "Chatbot", "Usage: delete task [task number]");
+                AppendMessage(box, "Chatbot", "Please use: delete task [task number]. Example: delete task 2");
             }
         }
 
@@ -505,6 +512,7 @@ namespace POEProgPart3
             {
                 tasks[index - 1].IsComplete = true;
                 AppendMessage(box, "Chatbot", $"Marked task #{index} as complete.");
+                ActivityLog.AddLog($"Marked task '{tasks[index - 1].Title}' as complete.");
             }
             else
             {
@@ -553,24 +561,5 @@ namespace POEProgPart3
             synth.SpeakAsyncCancelAll();
             synth.SpeakAsync(message);
         }
-
-
-        /*private static void PrintWithTyping(string message, ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            synth.SpeakAsyncCancelAll();  // This stops both sentence one and two from being spoken.
-            synth.SpeakAsync(message);
-
-            foreach (char c in message)// being used to simulate the typing effect of everything that uses
-                                       // printWithTyping 
-            {
-                Console.Write(c); //loops each message and gives it the typing effect
-                Thread.Sleep(30); // Creates typing effect
-                //(Mahesh Chand, 2024)
-            }
-
-            Console.WriteLine();
-            Console.ResetColor();
-        }*/
     }
 }

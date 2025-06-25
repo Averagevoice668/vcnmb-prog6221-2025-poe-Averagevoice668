@@ -16,7 +16,6 @@ namespace POEProgPart3
         public Form1()
         {
             InitializeComponent();
-            //Load += Form1_Load;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -31,52 +30,6 @@ namespace POEProgPart3
                 MessageBox.Show("Error in Form1_Load: " + ex.Message);
             }
 
-            /*if (firstLoad)
-            {
-                string intro = "Welcome to CourtoMates! Your personal cybersecurity chatbot.\n" +
-                    "Please enter you name to continue with this program:";
-                
-                //AppendMessage(rbtOutput, "Chatbot", "Welcome to CourtoMates! Your personal cybersecurity chatbot.");
-                //AppendMessage(rbtOutput, "Chatbot", "Please enter your name:");
-                //AppendMessage(rbtOutput, "Chatbot", "What is your favourite cybersecurity topic? (Password Safety, Phishing, Safe Browsing)");
-                firstLoad = false;
-            }*/
-        }
-
-        /*private static void AskName(RichTextBox conversationBox, string userName)
-        {
-            AppendMessage(conversationBox, "Chatbot:", "Please enter your name:");
-
-            if (!string.IsNullOrEmpty(userName))
-            {
-                userData.UserName = userName.Trim();
-                string greeting = $"Hello {userData.UserName}! I'm here to help you stay safe online.";
-                AppendMessage(conversationBox, "Chatbot:", greeting);
-
-                // Immediately ask for the favorite topic
-                AskFavouriteTopic(conversationBox, "");
-            }
-        }
-
-        private static void AskFavouriteTopic(RichTextBox conversationBox, string favouriteTopic)
-        {
-            AppendMessage(conversationBox, "Chatbot:", "What is your favourite cybersecurity topic? (Password Safety, Phishing, Safe Browsing)");
-
-            if (!string.IsNullOrEmpty(favouriteTopic))
-            {
-                userData.FavouriteTopic = favouriteTopic.Trim().ToLower();
-
-                if (responses.ContainsKey(userData.FavouriteTopic))
-                {
-                    AppendMessage(conversationBox, "Chatbot:", $"Great choice, {userData.UserName}! I’ll remember that you're interested in {userData.FavouriteTopic}.");
-                }
-                else
-                {
-                    AppendMessage(conversationBox, "Chatbot:", "Hmm, I didn't recognize that topic. Please choose from Password Safety, Phishing, or Safe Browsing.");
-                }
-            }
-        }
-        */
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             string userMessage = txtInput.Text.Trim();
@@ -145,6 +98,10 @@ namespace POEProgPart3
                     else if (userMessage.ToLower().StartsWith("complete task"))
                     {
                         ChatBot.HandleCompleteTask(userMessage, rbtOutput, tasks);
+                    }
+                    else if (userMessage.ToLower() == "show log")
+                    {
+                        ChatBot.ShowLog(rbtOutput);
                     }
                     // Normal chat or cybersecurity questions
                     else
