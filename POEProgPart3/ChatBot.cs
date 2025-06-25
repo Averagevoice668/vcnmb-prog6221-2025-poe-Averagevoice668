@@ -551,7 +551,7 @@ namespace POEProgPart3
             return responses[random.Next(responses.Count)];
         }
 
-        private static void AppendMessage(RichTextBox conversationBox, string sender, string message)
+        private static void AppendMessage(RichTextBox conversationBox, string sender, string message)//(Troelsen, A. and Japikse, P., 2022)
         {
             conversationBox.AppendText($"{sender}: {message}\n");
 
