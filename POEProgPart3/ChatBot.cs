@@ -205,7 +205,7 @@ namespace POEProgPart3
             return userInput;
         }
 
-        public static void ShowLog(RichTextBox box)
+        public static void ShowLog(RichTextBox box)//(Troelsen, A. and Japikse, P., 2022)
         {
             var logs = ActivityLog.ShowLog(10); // Shows last 10 logs
 
@@ -223,7 +223,7 @@ namespace POEProgPart3
             }
         }
 
-        public static void StartAddTask(RichTextBox conversationBox)
+        public static void StartAddTask(RichTextBox conversationBox)//(Troelsen, A. and Japikse, P., 2022)
         {
             isAddingTask = true;
             addTaskStep = 1;
@@ -231,10 +231,10 @@ namespace POEProgPart3
             AppendMessage(conversationBox, "Chatbot", "Let's add a task! What is the title?");
         }
 
-        public static void CheckReminders(RichTextBox conversationBox, List<AddTask> tasks)
+        public static void CheckReminders(RichTextBox conversationBox, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
         {
             var dueTasks = tasks
-                .Where(t => t.Reminder.HasValue && t.Reminder.Value <= DateTime.Now && !t.IsComplete)
+                .Where(t => t.Reminder.HasValue && t.Reminder.Value <= DateTime.Now && !t.IsComplete)//(MicrosoftLearn, 2025)
                 .ToList();
 
             foreach (var task in dueTasks)
@@ -244,7 +244,7 @@ namespace POEProgPart3
             }
         }
 
-        public static void ContinueAddTask(string userInput, RichTextBox conversationBox, List<AddTask> tasks)
+        public static void ContinueAddTask(string userInput, RichTextBox conversationBox, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
         {
             if (!isAddingTask)
                 return;
@@ -270,7 +270,6 @@ namespace POEProgPart3
                         tasks.Add(newTask);
                         AppendMessage(conversationBox, "Chatbot", $"Task '{newTask.Title}' added without a reminder.");
 
-                        // ✅ Add to activity log
                         ActivityLog.AddLog($"Added task '{newTask.Title}' without a reminder.");
 
                         ResetAddTask();
@@ -283,7 +282,6 @@ namespace POEProgPart3
                             tasks.Add(newTask);
                             AppendMessage(conversationBox, "Chatbot", $"Task '{newTask.Title}' added with reminder set for {reminderDate:g}.");
 
-                            // ✅ Add to activity log
                             ActivityLog.AddLog($"Added task '{newTask.Title}' with reminder for {reminderDate:g}.");
 
                             ResetAddTask();
@@ -297,7 +295,7 @@ namespace POEProgPart3
             }
         }
 
-        private static List<QuizQuestionSave> quizQuestions = new List<QuizQuestionSave>
+        private static List<QuizQuestionSave> quizQuestions = new List<QuizQuestionSave>//(Troelsen, A. and Japikse, P., 2022)
         {
             new QuizQuestionSave
             {
@@ -386,7 +384,7 @@ namespace POEProgPart3
             },
         };
 
-        public static void StartQuiz(RichTextBox box)
+        public static void StartQuiz(RichTextBox box)//(Troelsen, A. and Japikse, P., 2022)
         {
             quizInProgress = true;
             currentQuestionIndex = 0;
@@ -397,7 +395,7 @@ namespace POEProgPart3
             AskNextQuestion(box);
         }
 
-        private static void AskNextQuestion(RichTextBox box)
+        private static void AskNextQuestion(RichTextBox box)//(Troelsen, A. and Japikse, P., 2022)
         {
             if (currentQuestionIndex < quizQuestions.Count)
             {
@@ -418,7 +416,7 @@ namespace POEProgPart3
             }
         }
 
-        public static void HandleQuizAnswer(string input, RichTextBox box)
+        public static void HandleQuizAnswer(string input, RichTextBox box)//(Troelsen, A. and Japikse, P., 2022)
         {
             if (!quizInProgress) return;
 
@@ -449,7 +447,7 @@ namespace POEProgPart3
             }
         }
 
-        private static void EndQuiz(RichTextBox box)
+        private static void EndQuiz(RichTextBox box)//(Troelsen, A. and Japikse, P., 2022)
         {
             quizInProgress = false;
             AppendMessage(box, "Chatbot", $"Quiz Completed! :) You got {correctAnswers} out of {quizQuestions.Count} correct.");
@@ -474,7 +472,7 @@ namespace POEProgPart3
             return quizInProgress;
         }
 
-        public static void HandleDeleteTask(string input, RichTextBox box, List<AddTask> tasks)
+        public static void HandleDeleteTask(string input, RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
         {
             var parts = input.Split(' ');
 
@@ -505,7 +503,7 @@ namespace POEProgPart3
             }
         }
 
-        public static void HandleCompleteTask(string input, RichTextBox box, List<AddTask> tasks)
+        public static void HandleCompleteTask(string input, RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
         {
             var parts = input.Split(' ');
             if (parts.Length == 3 && int.TryParse(parts[2], out int index) && index >= 1 && index <= tasks.Count)
@@ -520,7 +518,7 @@ namespace POEProgPart3
             }
         }
 
-        public static void ViewTasks(RichTextBox box, List<AddTask> tasks)
+        public static void ViewTasks(RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
         {
             if (tasks.Count == 0)
             {
@@ -536,7 +534,7 @@ namespace POEProgPart3
             }
         }
 
-        private static void ResetAddTask()
+        private static void ResetAddTask()//(Troelsen, A. and Japikse, P., 2022)
         {
             isAddingTask = false;
             addTaskStep = 0;
@@ -563,3 +561,8 @@ namespace POEProgPart3
         }
     }
 }
+/*MicrosoftLearn, 2025. DateTime.Now Property[online] Available at:
+   < https://learn.microsoft.com/en-us/dotnet/api/system.datetime.now?view=net-9.0 >
+    [Accessed 25 June 2025]
+Troelsen, A. and Japikse, P., 2022.Pro C# 10 with .NET 6. 11th ed. New York: Apress Media, LLC.
+*/

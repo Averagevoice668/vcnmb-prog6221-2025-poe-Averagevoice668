@@ -16,9 +16,10 @@ namespace POEProgPart3
         public Form1()
         {
             InitializeComponent();
+            //Load += Form1_Load;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)//(Troelsen, A. and Japikse, P., 2022)
         {
             try
             {
@@ -30,7 +31,9 @@ namespace POEProgPart3
                 MessageBox.Show("Error in Form1_Load: " + ex.Message);
             }
 
-        private void btnSubmit_Click(object sender, EventArgs e)
+        }
+
+        private void btnSubmit_Click(object sender, EventArgs e)//(Troelsen, A. and Japikse, P., 2022)
         {
             string userMessage = txtInput.Text.Trim();
 
@@ -43,7 +46,8 @@ namespace POEProgPart3
                     ChatBot.SetUserName(userMessage);
                     nameEntered = true;
 
-                    AppendMessage(rbtOutput, "Chatbot", $"Hello {userMessage}! What is your favourite cybersecurity topic? (Password Safety, Phishing, Safe Browsing)");
+                    AppendMessage(rbtOutput, "Chatbot", $"Hello {userMessage}! What is your favourite cybersecurity topic? (Password Safety," +
+                        $" Phishing, Safe Browsing)");
                 }
                 else if (!topicEntered)
                 {
@@ -130,7 +134,7 @@ namespace POEProgPart3
 
         }
 
-        private async void btnStart_Click(object sender, EventArgs e)
+        private async void btnStart_Click(object sender, EventArgs e)//(Troelsen, A. and Japikse, P., 2022)
         {
             btnStart.Enabled = false;
 
@@ -143,7 +147,7 @@ namespace POEProgPart3
 
         }
 
-        private static void AppendMessage(RichTextBox conversationBox, string sender, string message)
+        private static void AppendMessage(RichTextBox conversationBox, string sender, string message)//(Troelsen, A. and Japikse, P., 2022)
         {
             conversationBox.SelectionStart = conversationBox.TextLength;
             conversationBox.SelectionLength = 0;
@@ -160,3 +164,6 @@ namespace POEProgPart3
         }
     }
 }
+/*
+Troelsen, A. and Japikse, P., 2022.Pro C# 10 with .NET 6. 11th ed. New York: Apress Media, LLC.
+*/
