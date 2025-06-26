@@ -295,6 +295,80 @@ namespace POEProgPart3
             }
         }
 
+        public static void HandleDeleteTask(string input, RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
+        {
+            var parts = input.Split(' ');
+
+            if (tasks.Count == 0)
+            {
+                AppendMessage(box, "Chatbot", "You have no tasks to delete.");
+                return;
+            }
+
+            if (parts.Length == 3 && int.TryParse(parts[2], out int index))
+            {
+                if (index >= 1 && index <= tasks.Count)
+                {
+                    var removedTask = tasks[index - 1];
+                    var taskTitle = tasks[index - 1].Title;
+                    tasks.RemoveAt(index - 1);
+                    AppendMessage(box, "Chatbot", $"Deleted task #{index}: {removedTask.Title}");
+                    ActivityLog.AddLog($"Deleted task '{taskTitle}'.");
+                }
+                else
+                {
+                    AppendMessage(box, "Chatbot", "That task number doesn't exist.");
+                }
+            }
+            else
+            {
+                AppendMessage(box, "Chatbot", "Please use: delete task [task number]. Example: delete task 2");
+            }
+        }
+
+        public static void HandleCompleteTask(string input, RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
+        {
+            var parts = input.Split(' ');
+            if (parts.Length == 3 && int.TryParse(parts[2], out int index) && index >= 1 && index <= tasks.Count)
+            {
+                tasks[index - 1].IsComplete = true;
+                AppendMessage(box, "Chatbot", $"Marked task #{index} as complete.");
+                ActivityLog.AddLog($"Marked task '{tasks[index - 1].Title}' as complete.");
+            }
+            else
+            {
+                AppendMessage(box, "Chatbot", "Usage: complete task [task number]");
+            }
+        }
+
+        public static void ViewTasks(RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
+        {
+            if (tasks.Count == 0)
+            {
+                AppendMessage(box, "Chatbot", "You have no tasks.");
+            }
+            else
+            {
+                AppendMessage(box, "Chatbot", "Here are your tasks:");
+                for (int i = 0; i < tasks.Count; i++)
+                {
+                    AppendMessage(box, "Chatbot", $"{i + 1}. {tasks[i]}");
+                }
+            }
+        }
+
+        private static void ResetAddTask()//(Troelsen, A. and Japikse, P., 2022)
+        {
+            isAddingTask = false;
+            addTaskStep = 0;
+            newTask = null;
+        }
+
+        public static bool IsAddingTask()
+        {
+            return isAddingTask;
+        }
+
         private static List<QuizQuestionSave> quizQuestions = new List<QuizQuestionSave>//(Troelsen, A. and Japikse, P., 2022)
         {
             new QuizQuestionSave
@@ -470,80 +544,6 @@ namespace POEProgPart3
         public static bool IsQuizInProgress()
         {
             return quizInProgress;
-        }
-
-        public static void HandleDeleteTask(string input, RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
-        {
-            var parts = input.Split(' ');
-
-            if (tasks.Count == 0)
-            {
-                AppendMessage(box, "Chatbot", "You have no tasks to delete.");
-                return;
-            }
-
-            if (parts.Length == 3 && int.TryParse(parts[2], out int index))
-            {
-                if (index >= 1 && index <= tasks.Count)
-                {
-                    var removedTask = tasks[index - 1];
-                    var taskTitle = tasks[index - 1].Title;
-                    tasks.RemoveAt(index - 1);
-                    AppendMessage(box, "Chatbot", $"Deleted task #{index}: {removedTask.Title}");
-                    ActivityLog.AddLog($"Deleted task '{taskTitle}'.");
-                }
-                else
-                {
-                    AppendMessage(box, "Chatbot", "That task number doesn't exist.");
-                }
-            }
-            else
-            {
-                AppendMessage(box, "Chatbot", "Please use: delete task [task number]. Example: delete task 2");
-            }
-        }
-
-        public static void HandleCompleteTask(string input, RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
-        {
-            var parts = input.Split(' ');
-            if (parts.Length == 3 && int.TryParse(parts[2], out int index) && index >= 1 && index <= tasks.Count)
-            {
-                tasks[index - 1].IsComplete = true;
-                AppendMessage(box, "Chatbot", $"Marked task #{index} as complete.");
-                ActivityLog.AddLog($"Marked task '{tasks[index - 1].Title}' as complete.");
-            }
-            else
-            {
-                AppendMessage(box, "Chatbot", "Usage: complete task [task number]");
-            }
-        }
-
-        public static void ViewTasks(RichTextBox box, List<AddTask> tasks)//(Troelsen, A. and Japikse, P., 2022)
-        {
-            if (tasks.Count == 0)
-            {
-                AppendMessage(box, "Chatbot", "You have no tasks.");
-            }
-            else
-            {
-                AppendMessage(box, "Chatbot", "Here are your tasks:");
-                for (int i = 0; i < tasks.Count; i++)
-                {
-                    AppendMessage(box, "Chatbot", $"{i + 1}. {tasks[i]}");
-                }
-            }
-        }
-
-        private static void ResetAddTask()//(Troelsen, A. and Japikse, P., 2022)
-        {
-            isAddingTask = false;
-            addTaskStep = 0;
-            newTask = null;
-        }
-
-        public static bool IsAddingTask()
-        {
-            return isAddingTask;
         }
 
         private static string SelectRandomResponse(List<string> responses)

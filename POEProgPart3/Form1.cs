@@ -153,7 +153,7 @@ namespace POEProgPart3
             conversationBox.SelectionLength = 0;
             conversationBox.SelectionColor = sender == "Chatbot" ? Color.Blue : Color.Green;
             conversationBox.AppendText($"{sender}: {message}\n");
-            conversationBox.SelectionColor = Color.White;
+            conversationBox.SelectionColor = Color.Blue;
             conversationBox.ScrollToCaret();
 
             if (sender == "Chatbot")
