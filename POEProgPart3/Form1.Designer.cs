@@ -63,7 +63,7 @@
             // 
             txtInput.BackColor = Color.Black;
             txtInput.ForeColor = Color.White;
-            txtInput.Location = new Point(266, 687);
+            txtInput.Location = new Point(250, 687);
             txtInput.Name = "txtInput";
             txtInput.Size = new Size(480, 27);
             txtInput.TabIndex = 2;
