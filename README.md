@@ -19,3 +19,6 @@ The user can now track their activities and view them via the activity log featu
 
 ## How to donwload it
 Clone the repository: https://github.com/VCNMB-2nd-years/vcnmb-prog6221-2025-poe-Averagevoice668
+
+## YouTube Link
+https://youtu.be/Gq5sFrVtaIQ 
