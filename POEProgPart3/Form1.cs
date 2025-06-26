@@ -162,6 +162,11 @@ namespace POEProgPart3
                 synth.SpeakAsync(message);
             }
         }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 /*

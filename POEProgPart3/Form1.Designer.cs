@@ -107,7 +107,8 @@
             Controls.Add(rbtOutput);
             Controls.Add(lblTitle);
             Name = "Form1";
-            Text = "Form1";
+            Text = "CourtoMates";
+            Load += Form1_Load_1;
             ResumeLayout(false);
             PerformLayout();
         }
